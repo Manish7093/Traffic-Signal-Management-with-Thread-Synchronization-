@@ -1,7 +1,7 @@
 # Traffic-Signal-Management-with-Thread-Synchronization-
 
 In this project I have Modelled a common roadway occurrence, where one lane is closed and a flag person is directing traffic. 
-On one side of the road there is some construction work is going on so all the vehicles coming from north and south direction has 
+On one side of the road there is some construction work is going on so all the vehicles coming from east and west direction has 
 to synchronise such that they pass through the construction area without any traffic jam or accident.                                                                       
 This simulation utilises synchronisation mechanisms like mutexes, condition variables, and semaphores to coordinate threads efficiently. 
 It prevents potential race conditions by safeguarding shared data structures with mutexes and ensures proper car generation through a 
