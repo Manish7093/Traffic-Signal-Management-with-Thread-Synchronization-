@@ -306,12 +306,12 @@ void displayVisualization() {
         cout << "| Traffic Direction: " << TrafficDirection <<"|" << endl;
         cout << "|-----------------------------|" << endl;
         cout << "| East Buffer: ";
-        for (int i = 0; i < EastBuffer.size(); ++i) {
+        for (long unsigned int i = 0; i < EastBuffer.size(); ++i) {
             cout << "\033[1;32m🚗 \033[0m"; // Set text color to green for cars (for Linux/macOS)
         }
         cout << "|" << endl;
         cout << "| West Buffer: ";
-        for (int i = 0; i < WestBuffer.size(); ++i) {
+        for (long unsigned int i = 0; i < WestBuffer.size(); ++i) {
             cout << "\033[1;33m🚙 \033[0m"; // Set text color to yellow for cars (for Linux/macOS)
         }
         cout << "|" << endl;
