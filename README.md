@@ -1,3 +1,10 @@
+# Build Steps
+- git clone https://github.com/Manish7093/Traffic-Signal-Management-with-Thread-Synchronization-.git
+- cd Traffic-Signal-Management-with-Thread-Synchronization
+- make
+- ./TrafficSystem.cpp
+- To close the application, you'll need to interrupt the execution of the program. One way to do this is to press Ctrl + C in the terminal where the program is running.
+
 # Traffic-Signal-Management-with-Thread-Synchronization-
 
 In this project I have Modelled a common roadway occurrence, where one lane is closed and a flag person is directing traffic. 
