@@ -2,7 +2,7 @@
 - git clone https://github.com/Manish7093/Traffic-Signal-Management-with-Thread-Synchronization-.git
 - cd Traffic-Signal-Management-with-Thread-Synchronization
 - make
-- ./TrafficSignalManager.cpp
+- ./TrafficSignalManager
 - To close the application, you'll need to interrupt the execution of the program. One way to do this is to press Ctrl + C in the terminal where the program is running.
 
 # Traffic-Signal-Management-with-Thread-Synchronization-
