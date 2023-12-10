@@ -9,7 +9,11 @@
 #include <queue>
 #include <iomanip>
 #include<sched.h>
+#include <thread>
+#include <chrono>
+
 using namespace std;
+
 
 // Thread attributes for different threads A, B, and C
 pthread_attr_t attrA, attrB, attrC;
@@ -288,6 +292,53 @@ void *Car_consumer(void *args) {
 
   return 0;
 }
+
+// Function to display real-time visualization
+void displayVisualization() {
+    while (1) {
+        // Clear the console
+        system("clear");  // For Linux/macOS
+        //system("cls");  // For Windows
+
+        // Display current state in a more visually appealing way
+        cout << "\033[1;34m"; // Set text color to blue (for Linux/macOS)
+        cout << "-------------------------------" << endl;
+        cout << "| Traffic Direction: " << TrafficDirection <<"|" << endl;
+        cout << "|-----------------------------|" << endl;
+        cout << "| East Buffer: ";
+        for (int i = 0; i < EastBuffer.size(); ++i) {
+            cout << "\033[1;32m🚗 \033[0m"; // Set text color to green for cars (for Linux/macOS)
+        }
+        cout << "|" << endl;
+        cout << "| West Buffer: ";
+        for (int i = 0; i < WestBuffer.size(); ++i) {
+            cout << "\033[1;33m🚙 \033[0m"; // Set text color to yellow for cars (for Linux/macOS)
+        }
+        cout << "|" << endl;
+        cout << "-------------------------------" << endl;
+        cout << "| Construction Zone: ";
+        if (EastBuffer.size() > 0 || WestBuffer.size() > 0) {
+            cout << "\033[1;31m🚧 \033[0m"; // Set text color to red for construction (for Linux/macOS)
+        } else {
+            cout << "\033[1;32m✅ \033[0m"; // Set text color to green for clear zone (for Linux/macOS)
+        }
+        cout << "|" << endl;
+        cout << "| Total Cars Created: " << Count_Car << "  |" << endl;
+        cout << "| Traffic Police: ";
+        if (EastBuffer.empty() && WestBuffer.empty()) {
+            cout << "Sleeping ";
+        } else {
+            cout << "Awake    ";
+        }
+        cout << "|" << endl;
+        cout << "-------------------------------" << endl;
+
+        // Sleep for a few seconds
+        std::this_thread::sleep_for(std::chrono::seconds(5));
+    }
+}
+
+
 int main() {
   // Initialize traffic direction to "East"
   strcpy(TrafficDirection, "East");
@@ -341,17 +392,20 @@ int main() {
   pthread_create(&fTid, &attrA, Car_consumer, NULL);
 
   // Create thread for car producer in the West direction
-  // Uncomment the following line when implementing produceWest function
-   pthread_create(&sTid, &attrB, produceWest, NULL);
+  //pthread_create(&sTid, &attrB, produceWest, NULL);
 
   // Create thread for car producer in the East direction
   pthread_create(&nTid, &attrC, produceEast, NULL);
 
+  std::thread visualizationThread(displayVisualization);
+ 
   // Main loop to keep the program running
   while (1) {
     fflush(stdout);
     Sleep_thread(1); // Sleep for 1 second
   }
+  
+  visualizationThread.join();
 
   // Clean up resources
   sem_close(&Semaphore_Car);
