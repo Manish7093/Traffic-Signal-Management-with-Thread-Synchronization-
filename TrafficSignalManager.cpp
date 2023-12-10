@@ -97,7 +97,7 @@ void *produceEast(void *args) {
                 cout << "Producing car in the East direction, LOCKS" << endl;
                 Count_Car++;
                 newCar.carID = Count_Car;
-                newCar.travelDirection = 'N';
+                newCar.travelDirection = 'E';
                 arrival.tv_sec = (unsigned int)time(NULL);
                 arrival.tv_nsec = 0;
                 newCar.CarArrived = arrival;
@@ -114,7 +114,7 @@ void *produceEast(void *args) {
                 cout << "Producing car in the West direction, mutex_lock LOCKS" << endl;
                 Count_Car++;
                 newCar.carID = Count_Car;
-                newCar.travelDirection = 'S';
+                newCar.travelDirection = 'W';
                 arrival.tv_sec = (unsigned int)time(NULL);
                 arrival.tv_nsec = 0;
                 newCar.CarArrived = arrival;
@@ -344,7 +344,7 @@ int main() {
   strcpy(TrafficDirection, "East");
 
   // Declare thread IDs and other variables
-  pthread_t sTid, nTid, fTid;
+  pthread_t nTid, fTid;
   int pshared = 1;
   int semValue = 1; // Value is 1 because this is a lock
   srand(time(NULL));
