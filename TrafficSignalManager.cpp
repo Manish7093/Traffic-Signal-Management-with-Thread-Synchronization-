@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <semaphore.h>
 #include <iostream>
 #include <fstream>
@@ -40,7 +41,7 @@ sem_t Semaphore_Car;
 
 struct car {
   int carID;                         // Unique identifier for each car
-  char travelDirection;               // Direction in which the car is traveling (e.g., 'N' for north, 'S' for south)
+  char travelDirection;               // Direction in which the car is traveling (e.g., 'E' for east, 'W' for west)
   struct timespec CarArrived;         // Time when the car appears on the road
   struct timespec CarStarted;         // Time when the car starts its journey through the construction zone
   struct timespec CarStopped;         // Time when the car completes its journey through the construction zone
@@ -102,7 +103,9 @@ void *produceEast(void *args) {
                 cout << "Number of cars in EastBuffer: " << k << endl;
 
                 Sleep_thread(1); // Simulate car production time
-            } else {
+            } 
+            else 
+            {
                 // Produce car in the West direction
                 cout << "Producing car in the West direction, mutex_lock LOCKS" << endl;
                 Count_Car++;
@@ -131,6 +134,40 @@ void *produceEast(void *args) {
 
     return 0;
 }
+
+// Car producer thread in the West direction
+void *produceWest(void *args) {
+  cout << "in west " << endl;
+  struct timespec arrival;
+  struct car newCar;
+  while (1) {
+    sem_wait(&Semaphore_Car);
+    pthread_mutex_lock(&TrafficPolice_mutex_lock);
+    while ((rand() % 10) < 8) {
+      cout << "Producing car in the west direction, MUTEX LOCKS" << endl;
+      Count_Car++;
+      newCar.carID = Count_Car;
+      newCar.travelDirection = 'W';
+      arrival.tv_sec = (unsigned int)time(NULL);
+      arrival.tv_nsec = 0;
+      newCar.CarArrived = arrival;
+      WestBuffer.push(newCar);
+      int k = WestBuffer.size();
+      cout << "Number of cars in WestBuffer: " << k << endl;
+      Sleep_thread(1); // Simulate car production time
+    }
+    cout << "sleep 20 S" << endl;
+    Sleep_thread(5);
+    pthread_cond_signal(&TrafficPolice_Condn);
+    pthread_mutex_unlock(&TrafficPolice_mutex_lock);
+    cout << "UNLOCKS" << endl;
+    sem_post(&Semaphore_Car); // Release the car production semaphore
+  }
+  return 0;
+}
+
+
+
 
 // Function to change the direction of traffic allowed through the construction zone
 void ChangeDirection() {
@@ -305,7 +342,7 @@ int main() {
 
   // Create thread for car producer in the West direction
   // Uncomment the following line when implementing produceWest function
-  // pthread_create(&sTid, &attrB, produceWest, NULL);
+   pthread_create(&sTid, &attrB, produceWest, NULL);
 
   // Create thread for car producer in the East direction
   pthread_create(&nTid, &attrC, produceEast, NULL);
